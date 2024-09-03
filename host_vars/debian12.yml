@@ -1,0 +1,2 @@
+apache_port: 80
+mysql_root_password: "your_strong_password"

@@ -1,0 +1,21 @@
+---
+- name: Install Apache
+  apt:
+    name: apache2
+    state: present
+
+- name: Copy Apache config
+  template:
+    src: apache.conf.j2
+    dest: /etc/apache2/sites-available/000-default.conf
+  notify: Restart Apache
+
+- name: Enable Apache rewrite module
+  command: a2enmod rewrite
+  notify: Restart Apache
+
+- name: Ensure Apache is running
+  service:
+    name: apache2
+    state: started
+    enabled: yes

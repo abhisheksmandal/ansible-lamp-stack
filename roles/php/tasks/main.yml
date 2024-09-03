@@ -1,0 +1,17 @@
+---
+- name: Install PHP
+  apt:
+    name: php
+    state: present
+
+- name: Install PHP modules
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - php-mysql
+    - libapache2-mod-php
+
+- name: Deploy info.php
+  template:
+    src: info.php.j2
+    dest: /var/www/html/info.php

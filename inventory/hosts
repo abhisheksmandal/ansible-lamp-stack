@@ -1,0 +1,2 @@
+[web]
+debian12 ansible_host=your_server_ip

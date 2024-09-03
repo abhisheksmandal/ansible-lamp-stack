@@ -1,0 +1,9 @@
+---
+- name: Configure LAMP stack on Debian 12
+  hosts: web
+  become: yes
+
+  roles:
+    - apache
+    - mysql
+    - php
