@@ -10,11 +10,16 @@
     dest: /usr/share/
     remote_src: yes
 
+- name: Find phpMyAdmin directory
+  shell: ls -d /usr/share/phpMyAdmin-* | sort -V | tail -n 1
+  register: phpmyadmin_dir
+
 - name: Symlink phpMyAdmin
   file:
-    src: /usr/share/phpMyAdmin-*/ # This will link to the latest version
+    src: "{{ phpmyadmin_dir.stdout }}"
     dest: /usr/share/phpmyadmin
     state: link
+  ignore_errors: yes
 
 - name: Configure phpMyAdmin Apache
   template:
@@ -25,3 +30,8 @@
 - name: Enable phpMyAdmin configuration
   command: a2enconf phpmyadmin
   notify: Restart Apache
+
+- name: Clean up phpMyAdmin tarball
+  file:
+    path: /tmp/phpmyadmin.tar.gz
+    state: absent
