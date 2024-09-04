@@ -1,0 +1,27 @@
+---
+- name: Download phpMyAdmin
+  get_url:
+    url: https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+    dest: /tmp/phpmyadmin.tar.gz
+
+- name: Extract phpMyAdmin
+  unarchive:
+    src: /tmp/phpmyadmin.tar.gz
+    dest: /usr/share/
+    remote_src: yes
+
+- name: Symlink phpMyAdmin
+  file:
+    src: /usr/share/phpMyAdmin-*/ # This will link to the latest version
+    dest: /usr/share/phpmyadmin
+    state: link
+
+- name: Configure phpMyAdmin Apache
+  template:
+    src: phpmyadmin.conf.j2
+    dest: /etc/apache2/conf-available/phpmyadmin.conf
+  notify: Restart Apache
+
+- name: Enable phpMyAdmin configuration
+  command: a2enconf phpmyadmin
+  notify: Restart Apache
