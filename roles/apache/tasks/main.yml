@@ -11,8 +11,11 @@
   notify: Restart Apache
 
 - name: Enable Apache rewrite module
-  command: a2enmod rewrite
+  apache2_module:
+    name: rewrite
+    state: present
   notify: Restart Apache
+  become: yes
 
 - name: Ensure Apache is running
   service:
