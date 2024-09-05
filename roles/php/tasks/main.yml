@@ -14,4 +14,4 @@
 - name: Deploy info.php
   template:
     src: info.php.j2
-    dest: /var/www/html/index.php
+    dest: /var/www/html/info.php

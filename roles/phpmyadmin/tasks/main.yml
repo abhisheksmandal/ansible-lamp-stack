@@ -1,37 +1,63 @@
 ---
-- name: Download phpMyAdmin
-  get_url:
-    url: https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
-    dest: /tmp/phpmyadmin.tar.gz
+# - name: Download phpMyAdmin
+#   get_url:
+#     url: https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+#     dest: /tmp/phpmyadmin.tar.gz
 
-- name: Extract phpMyAdmin
-  unarchive:
-    src: /tmp/phpmyadmin.tar.gz
-    dest: /usr/share/
-    remote_src: yes
+# - name: Extract phpMyAdmin
+#   unarchive:
+#     src: /tmp/phpmyadmin.tar.gz
+#     dest: /usr/share/
+#     remote_src: yes
 
-- name: Find phpMyAdmin directory
-  shell: ls -d /usr/share/phpMyAdmin-* | sort -V | tail -n 1
-  register: phpmyadmin_dir
+# - name: Find phpMyAdmin directory
+#   shell: ls -d /usr/share/phpMyAdmin-* | sort -V | tail -n 1
+#   register: phpmyadmin_dir
 
-- name: Symlink phpMyAdmin
-  file:
-    src: "{{ phpmyadmin_dir.stdout }}"
-    dest: /usr/share/phpmyadmin
-    state: link
-  ignore_errors: yes
+# - name: Symlink phpMyAdmin
+#   file:
+#     src: "{{ phpmyadmin_dir.stdout }}"
+#     dest: /usr/share/phpmyadmin
+#     state: link
+#   ignore_errors: yes
+##########################################################
+- name: Set debconf selections for phpMyAdmin
+  debconf:
+    name: phpmyadmin
+    question: "{{ item.question }}"
+    value: "{{ item.value }}"
+    vtype: "{{ item.vtype }}"
+  with_items:
+    - { question: "phpmyadmin/install-error", value: "abort", vtype: "select" }
+    - {
+        question: "phpmyadmin/dbconfig-install",
+        value: "false",
+        vtype: "boolean",
+      }
+    - {
+        question: "phpmyadmin/reconfigure-webserver",
+        value: "apache2",
+        vtype: "multiselect",
+      }
 
-- name: Configure phpMyAdmin Apache
-  template:
-    src: phpmyadmin.conf.j2
-    dest: /etc/apache2/conf-available/phpmyadmin.conf
-  notify: Restart Apache
+- name: Install phpMyAdmin
+  apt:
+    name: phpmyadmin
+    state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+##########################################################
 
-- name: Enable phpMyAdmin configuration
-  command: a2enconf phpmyadmin
-  notify: Restart Apache
+# - name: Configure phpMyAdmin Apache
+#   template:
+#     src: phpmyadmin.conf.j2
+#     dest: /etc/apache2/conf-available/phpmyadmin.conf
+#   notify: Restart Apache
 
-- name: Clean up phpMyAdmin tarball
-  file:
-    path: /tmp/phpmyadmin.tar.gz
-    state: absent
+# - name: Enable phpMyAdmin configuration
+#   command: a2enconf phpmyadmin
+#   notify: Restart Apache
+# - name: Clean up phpMyAdmin tarball
+#   file:
+#     path: /tmp/phpmyadmin.tar.gz
+#     state: absent

@@ -1,2 +1,3 @@
 [web]
-debian12 ansible_host=192.168.1.7
+debian12 ansible_host=192.168.1.15
+#debian12 ansible_host=192.168.4.179
