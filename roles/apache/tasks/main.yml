@@ -1,4 +1,8 @@
 ---
+- name: Ensure APT is up to date
+  apt:
+    update_cache: yes
+    
 - name: Install Apache
   apt:
     name: apache2
