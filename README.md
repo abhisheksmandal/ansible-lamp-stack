@@ -128,4 +128,4 @@ Feel free to open issues, submit pull requests, or offer suggestions to improve 
 ## Author
 
 - **Abhishek Mandal**
-- [GitHub Profile](https://github.com/your-profile)
+- [GitHub Profile](https://github.com/abhisheksmandal)
