@@ -94,7 +94,7 @@ Feel free to customize variables to fit your environment.
 
 1. Clone this repository:
     ```bash
-    git clone https://github.com/your-repo/ansible-lamp-stack.git
+    git clone https://github.com/abhisheksmandal/ansible-lamp-stack.git
     cd ansible-lamp-stack
     ```
 
